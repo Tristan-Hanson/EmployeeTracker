@@ -19,13 +19,13 @@ VALUES
 INSERT INTO employee(first_name, last_name, role_id, manager_id)
 VALUES
 ("Tristan", "Hanson", 1, NULL)
-("Darion", "Hanson", 1, NULL)
+("Darion", "Hanson", 1, 1)
 ("Mason", "Hanson", 1, NULL)
-("Madeline", "Hanson", 1, NULL)
+("Madeline", "Hanson", 1, 3)
 ("Bishop", "Hanson", 1, NULL)
-("Chase", "Kielmeyer", 1, NULL)
+("Chase", "Kielmeyer", 1, 5)
 ("Rilynn", "Kielmeyer", 1, NULL)
-("Brody", "Kielmeyer", 1, NULL)
+("Brody", "Kielmeyer", 1, 7)
 ("Heather", "Kielmeyer", 1, NULL)
-("Scott", "Kielmeyer", 1, NULL)
+("Scott", "Kielmeyer", 1, 9)
 
