@@ -8,10 +8,10 @@ const db = require("./db");
 function loadMainPrompts(){
     inquirer.prompt([
         {
-          type: "list",
+            type: "list",
           name: "choice",
           message: "What would you like to do?",
-          choices: [
+          choices:[
             {
                 name: "View All Employees",
                 value: "VIEW_EMPLOYEES"
@@ -44,12 +44,167 @@ function loadMainPrompts(){
                 name:"Quit",
                 value:"QUIT"
             }
-    
-            
           ]
         }
-      ])
-      .then(res => {
+    ])
+    .then(res => {
+        let choice = res.choice;
+        // Call the appropriate function depending on what the user chose
+        
+        switch (choice) {
+            case "VIEW_EMPLOYEES":
+            viewEmployees();
+            break;
+            case "ADD_EMPLOYEES":
+            addEmployee();
+            break;
+            case "UPDATE_EMPLOYEE":
+            updateEmployee();
+            break;
+            case "VIEW_ROLES":
+            viewRoles();
+            break;
+            case "ADD_ROLE":
+            addRole();
+            break;
+            case "VIEW_DEPARTMENTS":
+            viewDep();
+            break;
+            case "ADD_DEPARTMENT":
+            addDep();
+            break;
+            case "QUIT":
+            console.log('end')
+            break;
+        }
+        }
+    )
+}
 
+function viewEmployees() {
 
-    loadMainPrompts()
+    // Here we call the method in the db file for finding all employees.
+    // we get the result back, and then display the result 
+    db.findAllEmployees()
+        .then(([rows]) => {
+        let employees = rows;
+        console.log("\n");
+        console.table(employees);
+        })
+        .then(() => loadMainPrompts());
+    }
+    
+    function addEmployee(){
+    
+    inquirer.prompt([
+        {
+        type:'input',
+        name:'first_name',
+        message:"What is the employee's first name",
+        },
+        {
+        type:'input',
+        name:'last_name',
+        message:"What is the employee's last name",
+        },
+        {
+        type:'number',
+        name:'role',
+        message:'What is role id for this employee',
+        },
+        {
+        type:'number',
+        name:'manager_id',
+        message:'What is manager id for employee'
+        }
+    ])
+    .then((resEmp)=>{
+        db.makeEmployee(resEmp)
+        console.log(`${resEmp.first_name} created`)
+    }).then(() => loadMainPrompts());       
+    
+    }
+    
+    
+    function updateEmployee(){
+    inquirer.prompt([
+        {
+        type:'input',
+        name:'firstName',
+        message:"What is employee's first name"
+        },
+        {
+        type:'input',
+        name:'lastName',
+        message:"What is employee's last name"
+        },
+        {
+        type:'number',
+        name:'role',
+        message:'New role id'
+        }
+    ]).then((rup)=>{
+        db.updateEmployee(rup)
+        console.log(`Updated ${rup.firstName}`)
+    }).then(() => loadMainPrompts());
+    
+    }
+    
+    function viewRoles(){
+    db.findAllRoles()
+    .then(([rows]) => {
+        let employees = rows;
+        console.log("\n");
+        console.table(employees);
+    })
+    .then(() => loadMainPrompts());
+    }
+    
+    function addRole(){
+        inquirer.prompt([
+        {
+            type:'input',
+            name:'title',
+            message:'What is the name of the role',
+        },
+        {
+            type:'number',
+            name:'salary',
+            message:'What is the salary of the role',
+        },
+        {
+            type:'number',
+            name:'department_id',
+            message:'What is the department id'
+        }
+        ])
+        .then((res)=>{
+        db.makeRole(res)
+        console.log(`${res.title} role created`)
+        }).then(() => loadMainPrompts());       
+    }
+    
+    function viewDep(){
+    db.findAllDepartments()
+    .then(([rows]) => {
+        let employees = rows;
+        console.log("\n");
+        console.table(employees);
+    })
+    .then(() => loadMainPrompts());
+    }
+    
+    function addDep(){
+    inquirer.prompt([
+        {
+        type:'input',
+        name:'addDepartment',
+        message:'What is the name of the department'
+        }
+    ]).then((data)=>{
+        db.makeDep(data)
+        console.log(`Added ${data.addDepartment} to the database`)
+    }).then(() => loadMainPrompts());
+    }
+
+loadMainPrompts()
